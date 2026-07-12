@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الإعلانات المباشرة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0A1628;
+    --navy-900:#0F2340;
+    --navy-800:#16305A;
+    --cream:#F6F3EC;
+    --card:#FFFFFF;
+    --gold:#C9962C;
+    --gold-soft:#E8D5A8;
+    --ink:#1B2430;
+    --slate:#6B7280;
+    --green:#1F8A5F;
+    --green-bg:#E8F5EE;
+    --red:#C0392B;
+    --red-bg:#FBEAE8;
+    --border:#E4DFD3;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Tajawal',sans-serif;
+    min-height:100vh;
+  }
+  .num{font-family:'JetBrains Mono',monospace; font-feature-settings:"tnum";}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px;}
+
+  /* Header */
+  .header{
+    background:linear-gradient(135deg,var(--navy-950),var(--navy-800));
+    border-radius:var(--radius);
+    padding:22px 26px;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+    box-shadow:0 8px 24px rgba(10,22,40,0.18);
+  }
+  .header-title{display:flex;align-items:center;gap:12px;}
+  .pulse{
+    width:11px;height:11px;border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 0 0 rgba(201,150,44,0.6);
+    animation:pulse 2s infinite;
+    flex-shrink:0;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(201,150,44,0.55);}
+    70%{box-shadow:0 0 0 11px rgba(201,150,44,0);}
+    100%{box-shadow:0 0 0 0 rgba(201,150,44,0);}
+  }
+  .header h1{font-size:20px;font-weight:900;margin:0;}
+  .header .sub{font-size:12.5px;color:var(--gold-soft);margin-top:3px;font-family:'JetBrains Mono',monospace;}
+  .header-actions{display:flex;align-items:center;gap:10px;}
+  button{
+    font-family:'Tajawal',sans-serif;
+    border:none;cursor:pointer;
+    border-radius:10px;
+    font-weight:700;
+    font-size:13.5px;
+    padding:10px 16px;
+    transition:transform .12s ease, opacity .12s ease;
+  }
+  button:active{transform:scale(0.96);}
+  button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .btn-gold{background:var(--gold);color:var(--navy-950);}
+  .btn-gold:hover{opacity:.9;}
+  .btn-ghost{background:rgba(255,255,255,0.1);color:#fff;}
+  .btn-ghost:hover{background:rgba(255,255,255,0.18);}
+  .btn-ghost.spinning{animation:spin 1s linear infinite;}
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+  /* Summary */
+  .summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-top:18px;
+  }
+  .sum-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px 20px;
+  }
+  .sum-label{font-size:12.5px;color:var(--slate);font-weight:700;}
+  .sum-value{font-size:28px;font-weight:700;margin-top:6px;}
+  .sum-value.gold{color:var(--gold);}
+  .sum-value.green{color:var(--green);}
+
+  /* Grid */
+  .grid-title{margin:26px 2px 12px;font-size:14px;font-weight:900;color:var(--navy-900);display:flex;align-items:center;justify-content:space-between;}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(250px,1fr));
+    gap:14px;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px 18px 14px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card.no-spend{opacity:0.55;}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .card-name{font-weight:900;font-size:15px;}
+  .status-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+  .status-dot.active{background:var(--green);}
+  .status-dot.idle{background:#C9C2AF;}
+  .card-spend{font-size:24px;font-weight:700;margin-top:10px;}
+  .card-currency{font-size:12px;color:var(--slate);margin-right:4px;}
+  .card-meta{display:flex;gap:14px;margin-top:12px;}
+  .meta-item{font-size:12px;color:var(--slate);}
+  .meta-item b{display:block;color:var(--ink);font-size:14px;font-weight:700;margin-top:2px;}
+  .roas-badge{
+    display:inline-block;padding:2px 9px;border-radius:20px;
+    font-size:12px;font-weight:700;
+  }
+  .roas-badge.high{background:var(--green-bg);color:var(--green);}
+  .roas-badge.low{background:var(--red-bg);color:var(--red);}
+  .roas-badge.none{background:#EFEDE6;color:var(--slate);}
+  .share-bar{
+    position:absolute;bottom:0;right:0;left:0;height:4px;
+    background:#EFEBE0;
+  }
+  .share-bar-fill{
+    height:100%;background:linear-gradient(90deg,var(--gold),var(--navy-800));
+    transition:width .6s ease;
+  }
+
+  .empty, .error-box{
+    background:var(--card);border:1px dashed var(--border);border-radius:var(--radius);
+    padding:40px 20px;text-align:center;color:var(--slate);font-size:14px;
+  }
+  .error-box{border-color:var(--red);color:var(--red);background:var(--red-bg);}
+
+  /* Settings panel */
+  .panel-backdrop{
+    position:fixed;inset:0;background:rgba(10,22,40,0.45);
+    display:flex;align-items:center;justify-content:center;
+    z-index:50; padding:20px;
+  }
+  .panel{
+    background:var(--card);border-radius:var(--radius);
+    padding:22px;max-width:480px;width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+  }
+  .panel h2{margin:0 0 6px;font-size:16px;}
+  .panel p{font-size:12.5px;color:var(--slate);margin:0 0 14px;line-height:1.6;}
+  textarea{
+    width:100%;min-height:160px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    border:1px solid var(--border);border-radius:10px;
+    padding:12px;resize:vertical;
+    background:#FBFAF6;
+  }
+  textarea:focus-visible{outline:2px solid var(--gold);}
+  .panel-actions{display:flex;gap:10px;margin-top:14px;justify-content:flex-end;}
+  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--ink);}
+
+  .skeleton{
+    background:linear-gradient(90deg,#EFEBE0 25%,#F5F2E9 37%,#EFEBE0 63%);
+    background-size:400% 100%;
+    animation:shimmer 1.4s infinite;
+    border-radius:8px;
+  }
+  @keyframes shimmer{0%{background-position:100% 0;}100%{background-position:0 0;}}
+
+  @media (max-width:640px){
+    .summary{grid-template-columns:1fr;}
+    .header{padding:18px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .pulse{animation:none;}
+    .btn-ghost.spinning{animation:none;}
+    .skeleton{animation:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div>
+      <div class="header-title">
+        <span class="pulse"></span>
+        <h1>لوحة الإعلانات المباشرة</h1>
+      </div>
+      <div class="sub" id="lastUpdated">لسه ماحصلش تحديث</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-ghost" id="settingsBtn">⚙ الحسابات</button>
+      <button class="btn-gold" id="refreshBtn">↻ تحديث الآن</button>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="sum-card">
+      <div class="sum-label">إجمالي الصرف اليوم</div>
+      <div class="sum-value gold num" id="totalSpend">—</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">إجمالي المبيعات</div>
+      <div class="sum-value num" id="totalPurchases">—</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">ROAS الموزون</div>
+      <div class="sum-value green num" id="blendedRoas">—</div>
+    </div>
+  </div>
+
+  <div class="grid-title">
+    <span>الحسابات (<span id="accCount">0</span>)</span>
+    <span style="font-weight:400;color:var(--slate);font-size:12px;">تحديث تلقائي كل 90 ثانية</span>
+  </div>
+
+  <div id="content" class="grid"></div>
+
+</div>
+
+<div class="panel-backdrop" id="settingsPanel" style="display:none;">
+  <div class="panel">
+    <h2>حسابات الإعلانات</h2>
+    <p>سطر لكل حساب بالشكل: <b>ID,الاسم</b> — مثال: 752687033133698,DSP</p>
+    <textarea id="accountsInput"></textarea>
+    <div class="panel-actions">
+      <button class="btn-outline" id="cancelSettings">إلغاء</button>
+      <button class="btn-gold" id="saveSettings">حفظ وتحديث</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_ACCOUNTS = [
+  {id:"752687033133698", name:"DSP"},
+  {id:"279689624949917", name:"selizee"},
+  {id:"1144668869864432", name:"FATHY"},
+  {id:"1530449191150796", name:"omar"},
+  {id:"998291221989230", name:"velora"},
+  {id:"937775834575069", name:"Mos TEST"},
+  {id:"479451424364703", name:"Striker"}
+];
+
+let accounts = [...DEFAULT_ACCOUNTS];
+let refreshTimer = null;
+let isFetching = false;
+
+function fmtMoney(n){
+  return new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(Math.round(n));
+}
+function fmtRoas(n){
+  return n && n > 0 ? n.toFixed(1) + 'x' : '—';
+}
+
+async function loadAccounts(){
+  try{
+    const res = await window.storage.get('dashboard-accounts');
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      if(Array.isArray(parsed) && parsed.length) accounts = parsed;
+    }
+  }catch(e){ /* no saved config yet, use defaults */ }
+  document.getElementById('accCount').textContent = accounts.length;
+  document.getElementById('accountsInput').value = accounts.map(a=>a.id+','+a.name).join('\n');
+}
+
+async function saveAccounts(text){
+  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
+  const parsed = lines.map(l=>{
+    const [id, ...rest] = l.split(',');
+    return {id:(id||'').trim(), name:(rest.join(',')||id).trim()};
+  }).filter(a=>a.id);
+  if(!parsed.length) return;
+  accounts = parsed;
+  document.getElementById('accCount').textContent = accounts.length;
+  try{
+    await window.storage.set('dashboard-accounts', JSON.stringify(accounts));
+  }catch(e){ console.error('storage save failed', e); }
+}
+
+function renderSkeleton(){
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+  accounts.forEach(()=>{
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="skeleton" style="height:16px;width:60%;margin-bottom:14px;"></div>
+      <div class="skeleton" style="height:26px;width:80%;margin-bottom:12px;"></div>
+      <div class="skeleton" style="height:12px;width:50%;"></div>`;
+    content.appendChild(card);
+  });
+}
+
+function renderError(message){
+  document.getElementById('content').innerHTML =
+    `<div class="error-box" style="grid-column:1/-1;">تعذر تحديث البيانات: ${message}<br><span style="font-size:12px;">اضغط "تحديث الآن" للمحاولة تاني</span></div>`;
+}
+
+function renderData(rows){
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+
+  if(!rows.length){
+    content.innerHTML = `<div class="empty" style="grid-column:1/-1;">مفيش حسابات مضافة. دوس ⚙ الحسابات لإضافة حساب.</div>`;
+    return;
+  }
+
+  const totalSpend = rows.reduce((s,r)=>s+(r.spend||0),0);
+  const totalPurchases = rows.reduce((s,r)=>s+(r.purchases||0),0);
+  const totalRevenue = rows.reduce((s,r)=>s+((r.spend||0)*(r.roas||0)),0);
+  const blended = totalSpend > 0 ? totalRevenue/totalSpend : 0;
+
+  document.getElementById('totalSpend').textContent = fmtMoney(totalSpend) + ' ج.م';
+  document.getElementById('totalPurchases').textContent = totalPurchases;
+  document.getElementById('blendedRoas').textContent = fmtRoas(blended);
+
+  rows.sort((a,b)=>(b.spend||0)-(a.spend||0));
+
+  rows.forEach(r=>{
+    const spend = r.spend||0;
+    const hasSpend = spend > 0;
+    const sharePct = totalSpend > 0 ? Math.min(100,(spend/totalSpend)*100) : 0;
+    const roasClass = !r.roas ? 'none' : (r.roas >= 3 ? 'high' : 'low');
+
+    const card = document.createElement('div');
+    card.className = 'card' + (hasSpend ? '' : ' no-spend');
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-name">${r.name}</div>
+        <div class="status-dot ${hasSpend?'active':'idle'}"></div>
+      </div>
+      <div class="card-spend num">${fmtMoney(spend)}<span class="card-currency">ج.م</span></div>
+      <div class="card-meta">
+        <div class="meta-item">مبيعات<b class="num">${r.purchases||0}</b></div>
+        <div class="meta-item">ROAS<b><span class="roas-badge ${roasClass}">${fmtRoas(r.roas)}</span></b></div>
+      </div>
+      <div class="share-bar"><div class="share-bar-fill" style="width:${sharePct}%;"></div></div>
+    `;
+    content.appendChild(card);
+  });
+}
+
+function buildPrompt(){
+  const list = accounts.map(a=>`${a.id} (${a.name})`).join('، ');
+  return `استخدم أداة ads_get_ad_entities من META للحصول على أداء اليوم (date_preset=today, level=account) للحسابات الإعلانية دي: ${list}.
+لكل حساب هات: amount_spent و purchase_roas و actions:omni_purchase.
+لو حساب رجع نتيجة فاضية اعتبر spend=0 و purchases=0 و roas=0.
+رد فقط بمصفوفة JSON صحيحة بدون أي نص أو markdown أو شرح، بالشكل ده بالظبط:
+[{"id":"ACCOUNT_ID","name":"ACCOUNT_NAME","spend":0,"currency":"EGP","purchases":0,"roas":0}]`;
+}
+
+function extractJson(text){
+  const cleaned = text.replace(/```json/g,'').replace(/```/g,'').trim();
+  const start = cleaned.indexOf('[');
+  const end = cleaned.lastIndexOf(']');
+  if(start === -1 || end === -1) throw new Error('no JSON array found');
+  return JSON.parse(cleaned.slice(start, end+1));
+}
+
+async function fetchLiveData(){
+  if(isFetching) return;
+  isFetching = true;
+  const refreshBtn = document.getElementById('refreshBtn');
+  refreshBtn.disabled = true;
+  refreshBtn.querySelector ? null : null;
+  const spinIcon = document.querySelector('.btn-ghost');
+  renderSkeleton();
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: buildPrompt() }],
+        mcp_servers: [{ type: "url", url: "https://mcp.facebook.com/ads", name: "META" }]
+      })
+    });
+
+    if(!response.ok){
+      throw new Error('HTTP ' + response.status);
+    }
+
+    const data = await response.json();
+    const textBlocks = (data.content || [])
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('\n');
+
+    if(!textBlocks.trim()){
+      throw new Error('مفيش رد نصي من الموديل');
+    }
+
+    const rows = extractJson(textBlocks);
+    renderData(rows);
+
+    const now = new Date();
+    document.getElementById('lastUpdated').textContent =
+      'آخر تحديث: ' + now.toLocaleTimeString('ar-EG', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+  }catch(err){
+    console.error(err);
+    renderError(err.message || 'خطأ غير معروف');
+  }finally{
+    isFetching = false;
+    refreshBtn.disabled = false;
+  }
+}
+
+function startAutoRefresh(){
+  if(refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(fetchLiveData, 90000);
+}
+
+document.getElementById('refreshBtn').addEventListener('click', fetchLiveData);
+document.getElementById('settingsBtn').addEventListener('click', ()=>{
+  document.getElementById('settingsPanel').style.display = 'flex';
+});
+document.getElementById('cancelSettings').addEventListener('click', ()=>{
+  document.getElementById('settingsPanel').style.display = 'none';
+});
+document.getElementById('saveSettings').addEventListener('click', async ()=>{
+  await saveAccounts(document.getElementById('accountsInput').value);
+  document.getElementById('settingsPanel').style.display = 'none';
+  fetchLiveData();
+});
+
+(async function init(){
+  await loadAccounts();
+  renderSkeleton();
+  await fetchLiveData();
+  startAutoRefresh();
+})();
+</script>
+</body>
+</html>
